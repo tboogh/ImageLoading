@@ -10,13 +10,20 @@ import SwiftUI
 struct ImageCardView: View {
     let photo: ApiPhoto
     
-//    @ObservedObject var imageLoader = ImageLoader()
-    @State var display: Bool = false
+    @ObservedObject var imageLoader = ImageLoader()
     var body: some View {
         VStack{
-            AsyncImage(display: display, url: photo.url)
-                .frame(height:300)
-                .padding(5)
+            if imageLoader.image == nil {
+                EmptyView()
+                    .frame(height:300)
+                    .padding(5)
+            } else {
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(height:300)
+                    .padding(5)
+            }
             Text("\(photo.rover.name) \(photo.id)")
                 .foregroundColor(.accentColor)
                 .frame(height:50, alignment: .center)
@@ -25,12 +32,20 @@ struct ImageCardView: View {
         .background(Color.primary)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onAppear(perform: {
-            display = true
+            imageLoader.url = photo.url
         })
         .onDisappear(perform: {
-            display = false
-//            imageLoader.cancel()
+            imageLoader.cancel()
         })
+    }
+    
+    var image: Image {
+        #if os(iOS) || os(watchOS) || os(tvOS)
+        return Image(uiImage: imageLoader.image!)
+        #elseif os(macOS)
+        return Image(nsImage: imageLoader.image!)
+            
+        #endif
     }
 }
 
