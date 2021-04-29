@@ -16,7 +16,7 @@ class ImageLoading {
     var cancellables = [String: AnyCancellable]()
     
     func cancel(url: String) {
-        print("cancel: \(url)")
+//        print("cancel: \(url)")
         guard let cancellable = cancellables[url] else {
             return
         }
@@ -25,7 +25,7 @@ class ImageLoading {
     }
     
     func loadImage(url: String) {
-        print("load: \(url)")
+//        print("load: \(url)")
         let cachedData = ImageCache.shared.cache[url]
         if cachedData != nil {
             let image = OSImage(data: cachedData!)

@@ -17,12 +17,14 @@ class MainViewModel: ObservableObject {
             .receive(on: DispatchQueue.main).sink { completion in
             switch(completion){
             case .finished:
-                print("done")
-            case .failure(let error):
-                print("failed: \(error)")
+                break
+//                print("done")
+            case .failure(_):
+                break
+//                print("failed: \(error)")
             }
         } receiveValue: { [weak self] photo in
-            print(photo.photos.count)
+//            print(photo.photos.count)
             guard let self = self else { return }
             self.photos = photo.photos
         }.store(in: &cancellables)

@@ -12,17 +12,33 @@ struct ApiPhotos: Codable {
 }
 
 struct ApiPhoto: Identifiable, Codable {
+    internal init(id: Int, sol: Int, earthDate: String, camera: Camera, imgSrc: String, rover: Rover) {
+        self.id = id
+        self.sol = sol
+        self.earthDate = earthDate
+        self.camera = camera
+        self.imgSrc = imgSrc
+        self.rover = rover
+        self.url = imgSrc.replacingOccurrences(of: "http:", with: "https:")
+    }
+    
     let id: Int
     let sol: Int
     let earthDate: String
     let camera: Camera
     let imgSrc: String
     let rover: Rover
+    let url: String
     
-    var url: String {
-        let url = photo.imgSrc
-        let result = url.replacingOccurrences(of: "http:", with: "https:")
-        return result
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        id = try values.decode(Int.self, forKey: .id)
+        sol = try values.decode(Int.self, forKey: .sol)
+        earthDate = try values.decode(String.self, forKey: .earthDate)
+        camera = try values.decode(Camera.self, forKey: .camera)
+        imgSrc = try values.decode(String.self, forKey: .imgSrc)
+        rover = try values.decode(Rover.self, forKey: .rover)
+        url = imgSrc.replacingOccurrences(of: "http:", with: "https:")
     }
     
     enum CodingKeys: String, CodingKey {

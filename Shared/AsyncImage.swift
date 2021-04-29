@@ -34,7 +34,7 @@ struct AsyncImage: View {
             }
         }
         .onReceive(ImageLoading.instance.images) { result in
-            print("recieve")
+//            print("recieve")
             if (result.key == url){
                 image = result.image
             }
